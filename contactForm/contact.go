@@ -3,10 +3,11 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	_ "go-sql-driver/mysql"
 	"html/template"
 	"log"
 	"net/http"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Details struct {
@@ -22,7 +23,7 @@ func main() {
 	/*
 		SQL DATABASE
 	*/
-	db, err := sql.Open("mysql", "username:password@tcp(localhost:3306)/database_name")
+	db, err := sql.Open("mysql", "root:CSD@mysql-1872@(127.0.0.1:3306)/form_details?parseTime=true")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,7 +56,7 @@ func main() {
 			PHONE:   r.FormValue("phoneNumber"),
 		}
 		list = append(list, details)
-		result, err := db.Exec(`INSERT INTO form_details(name, email, subject, message, phoneNumber) VALUES (?, ?, ?, ?, ?)`, details.NAME, details.EMAIL, details.SUBJECT, details.MESSAGE, details.PHONE)
+		result, err := db.Exec(`INSERT INTO form_details(name, email, subject, message, phone) VALUES (?, ?, ?, ?, ?)`, details.NAME, details.EMAIL, details.SUBJECT, details.MESSAGE, details.PHONE)
 		if err != nil {
 			log.Fatal(err)
 		}
